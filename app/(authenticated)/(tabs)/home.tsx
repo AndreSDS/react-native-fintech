@@ -6,6 +6,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { ScrollView, Text, View, StyleSheet, Button } from "react-native";
 import {defaultStyles} from "@/constants/Styles";
+import List from "@/components/sortable-list/sortable-list";
+import WidgetList from "@/components/sortable-list/widget-list";
 
 function Page() {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -50,6 +52,9 @@ function Page() {
             </View>
         ))}
       </View>
+
+      <Text style={defaultStyles.sectionHeader}>Widgets</Text>
+      <WidgetList />
     </ScrollView>
   );
 }

@@ -53,7 +53,8 @@ export function Dropdown({ isVisible, handleOpen }: DropdownProps) {
       }}
       animationIn="slideInRight"
       animationOut="slideOutRight"
-      hasBackdrop={false}
+      hasBackdrop={true}
+      backdropColor="transparent"
       isVisible={isVisible}
       onBackdropPress={handleOpen}
     >

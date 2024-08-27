@@ -59,6 +59,7 @@ const InitialLayout = () => {
   const router = useRouter();
   const { isLoaded, isSignedIn } = useAuth();
   const segments = useSegments();
+  const inAuthGroup = segments[0] === "(authenticated)";
 
   useEffect(() => {
     if (error) throw error;
@@ -70,13 +71,9 @@ const InitialLayout = () => {
 
   useEffect(() => {
     if (!isLoaded) return;
-
-    const inAuthGroup = segments[0] === "(authenticated)";
     
     if (isSignedIn && !inAuthGroup) {
-      router.replace("./(authenticated)/(tabs)/home");
-    } else if (!isSignedIn) {
-      router.replace("/");
+      router.replace("/(authenticated)/(tabs)/home");
     }
   }, [isSignedIn]);
 
