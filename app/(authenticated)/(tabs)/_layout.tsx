@@ -9,7 +9,7 @@ function Layout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors.primary,
-        tabBarBackground: () => <BlurView intensity={100} style={{
+        tabBarBackground: () => <BlurView tint="extraLight" intensity={80} style={{
           flex: 1,
           backgroundColor: 'rgba(0,0,0,0.05)'
         }} />,
@@ -31,7 +31,8 @@ function Layout() {
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="registered" color={color} size={size} />
           ),
-          header: () => <CustomHeader /> ,
+          header: () => <CustomHeader />,
+          headerTransparent: true
         }}
       />
 

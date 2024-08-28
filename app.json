@@ -25,14 +25,17 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "server",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
       "expo-asset",
       "expo-av",
-      "expo-secure-store"
+      "expo-secure-store",
+      {
+        "origin": "https://galaxies.dev"
+      }
     ],
     "experiments": {
       "typedRoutes": true

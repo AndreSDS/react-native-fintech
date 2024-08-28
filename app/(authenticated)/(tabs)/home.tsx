@@ -2,28 +2,28 @@ import { Dropdown } from "@/components/dropdown";
 import { RoundedButton } from "@/components/rounded-button";
 import Colors from "@/constants/Colors";
 import { useBalanceStore } from "@/store/balanceStore";
-import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { ScrollView, Text, View, StyleSheet, Button } from "react-native";
-import {defaultStyles} from "@/constants/Styles";
-import List from "@/components/sortable-list/sortable-list";
+import { defaultStyles } from "@/constants/Styles";
 import WidgetList from "@/components/sortable-list/widget-list";
+import { useHeaderHeight } from "@react-navigation/elements"
 
 function Page() {
   const [isModalVisible, setModalVisible] = useState(false);
-  const {balance, runTransaction, clearTransactions, transactions} = useBalanceStore()
+  const { balance, runTransaction, clearTransactions, transactions } = useBalanceStore()
+  const headerHeight = useHeaderHeight();
 
   function handleAddMoney() {
     runTransaction({
-        id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
-        amount: 100,
-        date: new Date(),
-        title: "Added money",
+      id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+      amount: 100,
+      date: new Date(),
+      title: "Added money",
     })
   }
 
   return (
-    <ScrollView style={{ backgroundColor: Colors.background }}>
+    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingTop: headerHeight }} style={{ backgroundColor: Colors.background }}>
       <View style={styles.account}>
         <View style={styles.row}>
           <Text style={styles.balance}>{balance()}</Text>
@@ -47,9 +47,9 @@ function Page() {
           color: Colors.gray,
         }}>No transactions yet</Text>}
         {transactions.map((transaction) => (
-            <View key={transaction.id}>
-              <Text>{transaction.title}</Text>
-            </View>
+          <View key={transaction.id}>
+            <Text>{transaction.title}</Text>
+          </View>
         ))}
       </View>
 
