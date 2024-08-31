@@ -36,8 +36,6 @@ const Page = () => {
           (factor) => factor.strategy === "phone_code",
         );
 
-        console.log({ firstPhoneFactor });
-
         const { phoneNumberId } = firstPhoneFactor;
 
         await signIn!.prepareFirstFactor({

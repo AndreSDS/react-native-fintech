@@ -29,13 +29,15 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "origin": "https://galaxies.dev"
+        }
+      ],
       "expo-asset",
       "expo-av",
-      "expo-secure-store",
-      {
-        "origin": "https://galaxies.dev"
-      }
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
