@@ -1,16 +1,24 @@
 import Colors from "@/constants/Colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
-import { Link, Stack, useRouter, useSegments } from "expo-router";
+import { Link, Stack, useRouter, useSegments, useFocusEffect } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity, Text, AppState, Platform } from "react-native";
+import type { AppStateStatus } from 'react-native'
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ClerkProvider, ClerkLoaded, useAuth } from "@clerk/clerk-expo";
-import { Slot } from "expo-router";
+import {
+  focusManager,
+  onlineManager,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
+import NetInfo from '@react-native-community/netinfo'
 import * as SecureStore from "expo-secure-store";
 
+const queryClient = new QueryClient()
 const tokenCache = {
   async getToken(key: string) {
     try {
@@ -51,6 +59,12 @@ const defaultNavgationOptions = {
   },
 };
 
+function onAppStateChange(status: AppStateStatus) {
+  if (Platform.OS !== 'web') {
+    focusManager.setFocused(status === 'active')
+  }
+}
+
 const InitialLayout = () => {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
@@ -60,6 +74,12 @@ const InitialLayout = () => {
   const { isLoaded, isSignedIn } = useAuth();
   const segments = useSegments();
   const inAuthGroup = segments[0] === "(authenticated)";
+
+  onlineManager.setEventListener((setOnline) => {
+    return NetInfo.addEventListener((state) => {
+      setOnline(!!state.isConnected)
+    })
+  })
 
   useEffect(() => {
     if (error) throw error;
@@ -71,11 +91,17 @@ const InitialLayout = () => {
 
   useEffect(() => {
     if (!isLoaded) return;
-    
+
     if (isSignedIn && !inAuthGroup) {
       router.replace("/(authenticated)/(tabs)/home");
     }
   }, [isSignedIn]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', onAppStateChange)
+  
+    return () => subscription.remove()
+  }, [])
 
   if (!loaded || !isLoaded) return <Text>Loading...</Text>;
 
@@ -159,7 +185,9 @@ const RootLayoutNav = () => {
       <ClerkLoaded>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <StatusBar style="light" />
-          <InitialLayout />
+          <QueryClientProvider client={queryClient}>
+            <InitialLayout />
+          </QueryClientProvider>
         </GestureHandlerRootView>
       </ClerkLoaded>
     </ClerkProvider>
